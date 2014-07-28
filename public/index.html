@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+	<title>Tic Tac Toe Game</title>
+	<link rel="stylesheet" type="text/css" href="./css/style.css" />
+	<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+	</head>
+	<body>
+		<div class="header">
+			<span class="header-left">Tic Tac Toe<span>
+			<a href="#github">
+				<span class="header-right"> Github <span>	
+			</a>
+			<a href="#contact">		
+				<span class="header-right"> Contact <span>	
+			</a>
+			<a href="#bugs">		
+				<span class="header-right"> Report Bugs <span>	
+			</a>		
+		</div>
+
+
+		<div class="content">
+
+			<div class="init" id="init">
+				<input placeholder="Enter your username" type="text" name="name" id="name">
+				<button id="name-submit"> Submit </button>
+
+				<br />
+				<br />
+				<br />
+				<input placeholder="Game ID" type="text" name="gameId" id="game-id-box">
+
+				<button id="create-game"> Create New Game</button>
+				<button id="join-game"> Join Existing Game</button>
+
+			<!--	<button id="join-random-game">Join a Random Game</button> -->
+
+				<img src="./images/Preloader.gif" id="loader"/><br/>
+				<span id="loader-text">Waiting for users to connect . . . <span>
+
+
+			</div>	
+
+			<div class="arena" id="arena"> 
+				<div class="left stats">
+					<div class="user"> 
+						<div class="user-name active-user" id="user_1">
+							User 1
+						</div>
+						<div class="symbol user-1-cell"> O
+						</div>	
+					</div>
+
+					<div class="user">
+						<div class="user-name" id="user_2">
+							User 2
+						</div>
+						<div class="symbol user-2-cell"> X
+						</div>	
+					</div>
+
+					<div class="msg" id="msg">
+						Cool man you win
+					</div>
+
+					<div class="restart"> 
+						<button id="restart">Restart the Game</button>
+					</div>
+
+				</div>
+
+				<div class="right">	
+					<table id="board">
+						<tr>
+							<td id="c1" class="user-2-cell active"> 1</td>
+							<td id="c2" class="user-1-cell"> 2</td>
+							<td id="c3" class="active"> 3</td>
+						</tr>	
+						<tr>
+							<td id="c4"> 4</td>
+							<td id="c5"> 5</td>
+							<td id="c6"> 6</td>
+						</tr>	
+						<tr>
+							<td id="c7"> 7</td>
+							<td id="c8"> 8</td>
+							<td id="c9"> 9</td>
+						</tr>	
+					</table>
+				</div>		
+
+			</div>
+
+
+		</div>	
+
+		<script type="text/javascript" src="./js/tic.tac.toe.js"></script>
+	</body>
+</html>
