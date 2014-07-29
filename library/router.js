@@ -1,4 +1,3 @@
-// var requestHandlers = require('./requestHandlers');
 
 
 function route(handle, pathname, response, postData, getQuery) { 
@@ -22,7 +21,8 @@ function route(handle, pathname, response, postData, getQuery) {
 			".txt": "text/plain",
 			".jpg": "image/jpeg",
 			".gif": "image/gif",
-			".png": "image/png"
+			".png": "image/png",
+			".ico": "image/icon"
 		};
 		
 		if( validExtensions["." + pathname.split('.').pop()] ) {

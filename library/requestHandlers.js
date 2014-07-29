@@ -1,36 +1,9 @@
 
-//var exec = require("child_process").exec;
-
-var querystring = require('querystring');
+//required libraries
 var http = require("http");
 var path = require("path"); 
 var fs = require("fs");     
 var url = require("url");
-
-function start(response, postData, getQuery) {
-console.log("Request handler 'start' was called.");
-var body = '<html>'+
-				'<head>'+
-				'<meta http-equiv="Content-Type" content="text/html; '+ 'charset=UTF-8" />'+
-				'</head>'+
-				'<body>'+
-				'<form action="/upload?cool=man" method="post">'+
-				'<textarea name="text" rows="20" cols="60"></textarea>'+ '<input type="submit" value="Submit text" />'+ '</form>'+
-				'</body>'+
-		    '</html>';
-    response.writeHead(200, {"Content-Type": "text/html"});
-    response.write(body);
-    response.end();
-}
-
-
-
-function upload(response, postData, getQuery) {
-	console.log("Request handler 'upload' was called."); 
-	response.writeHead(200, {"Content-Type": "text/plain"}); 
-	response.write("You have sent this : " + querystring.parse(postData).text + "\n ### Get data : " + querystring.parse(getQuery).cool);
-	response.end();
-}
 
 
 function handleStaticFiles(response, pathname) {
@@ -50,7 +23,8 @@ function handleStaticFiles(response, pathname) {
 		".txt": "text/plain",
 		".jpg": "image/jpeg",
 		".gif": "image/gif",
-		".png": "image/png"
+		".png": "image/png",
+		".ico": "image/icon"
 	};
 	var isValidExt = validExtensions[ext];
  
@@ -94,7 +68,4 @@ function handleStaticFiles(response, pathname) {
 	}
 }
 
-
-exports.start = start;
-exports.upload = upload;
 exports.handleStaticFiles = handleStaticFiles;

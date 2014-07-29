@@ -2,11 +2,6 @@
 /*-------------------------------------------------------------------------------------------------------
 Global Variables
 --------------------------------------------------------------------------------------------------------*/
-var Me = 0,
-	MyId = 0,
-	socket = io('http://localhost'),
-	playerDisable = true,
-	otherPlayersMove = false;
 
 var serverVariables = {
 	gameId		: ''
@@ -21,6 +16,15 @@ var Game = {
 	Winner			: null,
 	WinningCase 	: 0
 };
+
+var socket = io('ws://tictactoe-ynos1234.rhcloud.com:8000');
+
+var Me = 0,
+	MyId = 0,
+	playerDisable = true,
+	otherPlayersMove = false,
+	createGameFlag = null;
+
 
 
 /*-------------------------------------------------------------------------------------------------------
@@ -67,7 +71,7 @@ socket.on('playGame', function(data) {
 				console.log('Other players move recieved.');
 				otherPlayersMove = true;
 				play(data);
-				console.log("other players move implemented.")
+				console.log("other players move implemented.");
 				//implementOtherPlayersMove(data);
 			});
 
@@ -102,6 +106,9 @@ function initialListners() {
 	getId("join-game", 1).addEventListener('click', joinGame, false);
 	//getId("join-random-game", 1).addEventListener('click', joinRandomGame, false);
 
+	//hiding some classes
+	hideClass(["arena", "create-game", "join-game", "game-id-box", "loader", "loader-text"]);
+
 }
 
 function getUserName(evt) {
@@ -111,23 +118,27 @@ function getUserName(evt) {
 	evt.target.removeEventListener( 'click', getUserName, false);
 
 	//hiding the name-submit button
-	getId("name-submit", 1).style.display = "none";
+	hideClass(["name-submit"]);
 
+	//getting the username and disabling the input box
 	Me = getId("name", 1).value;
-	getId("name", 1).setAttribute("disabled", "true");
-	getId("name", 1).style.width = "94%";
+
+	applyStyle(6, "name", ["disabled", "true"]);
+	applyStyle(2, "name", "94%");
+	applyStyle(4, "clear", "40px");
 	console.log(Me);
+	
 	//unhiding create and join game buttons
-	getId("create-game", 1).style.display = "inline-block";
-	getId("join-game", 1).style.display = "inline-block";
+	showClass({"create-game" : 1, "join-game" : 1});
 }
 
 
 function createGame( evt) {
     
     //removing listner for create game
-	evt.target.removeEventListener('click', createGame, false)
+	evt.target.removeEventListener('click', createGame, false);
 	socket.emit('CreateGame', { 'clientName': Me});
+	createGameFlag = true;
 	console.log("createGame");
 }
 
@@ -147,20 +158,18 @@ function createGameSuccess( data ) {
 
 function helperOfcreateGameSuccess() {
 	//hiding the join game and create game
-	getId("create-game", 1).style.display = "none";
-	getId("join-game", 1).style.display = "none";
+	hideClass(["create-game", "join-game"]);
 
 	//displaying the game id to the user and showing please wait
-	getId("game-id-box", 1).style.display = "inline-block";
-	getId("game-id-box", 1).style.width = "94%";
-	getId("game-id-box", 1).value = "Game ID : "+serverVariables.gameId;
-	getId("game-id-box", 1).setAttribute("disabled", "true");
+	getId("game-id-box", 1).value = "Game ID : " + serverVariables.gameId;
+	showClass({"game-id-box" : 1});
+	applyStyle(6, "game-id-box", ["disabled", "true"]);
+	applyStyle(2, "game-id-box", "94%");
 
 	//displaying preloader img and text
-	getId("loader", 1).style.display = "block";
+	showClass({"loader" : 0, "loader-text" : 0});
 	displayMsg( {"loader-text" : "Waiting for users to connect . ."});
-	getId("loader-text", 1).style.display = "block";
-	getId("init", 1).style.marginTop = "-200px" ;
+	applyStyle(4, "init", "-200px");
 }
 
 
@@ -175,13 +184,14 @@ function joinGame( evt) {
 	} else {
 		if( getId("game-id-box", 1).style.display == "inline-block") {
 			getId("game-id-box", 1).value = "";
-			getId("game-id-box", 1).setAttribute("placeholder", "Invalid Game ID");
+			applyStyle(6, "game-id-box", ["placeholder", "Invalid Game ID"]);
 		}
 	}
+	createGameFlag = false;
 
-	getId("create-game", 1).style.display = "none";
-	//getId("join-random-game", 1).style.display = "block";
-	getId("game-id-box", 1).style.display = "inline-block";
+	//applying element styles
+	hideClass(["create-game"]);
+	showClass({"game-id-box" : 1});
 	console.log("joinGame Show box");
 }
 
@@ -189,10 +199,11 @@ function joinGame( evt) {
 function enableJoinGame( msg){
 	//adding event listner to join game
 	getId("join-game", 1).addEventListener('click', joinGame, false);
-	getId("loader-text", 1).style.display = "block";
-	getId("loader-text", 1).style.marginTop = "50px";
-	getId("init", 1).style.marginLeft = "-350px";
-	getId("loader-text", 1).innerHTML = msg;
+
+	showClass({"loader-text" : 0});
+	applyStyle(4, "loader-text", "50px");
+	applyStyle(3, "init", "-350px");
+	displayMsg({"loader-text" : msg});
 }
 
 
@@ -202,17 +213,21 @@ function startGame( player1, player2) {
 	Game.PlayerTwo = player2;
 	Game.CurrentPlayer = 1;
 	
+	console.log("before inti");
 	gameinit();
 
+	console.log("after init");
 	//hide the preloader things
-	getId("init", 1).style.display = "none";
-	getId("arena", 1).style.display = "inline-block";
+	hideClass( ["init"] );
+	showClass( {"arena" : 1} );
+	editClass( {"arena" : "arena"} , 1);
 }
 
 function loadPreloader() {
 	//hide the arena and unhide preloader
-	getId("init", 1).style.display = "inline-block";
-	getId("arena", 1).style.display = "none";
+	hideClass(["arena", "game-id-box", "loader"]);
+	editClass( {"init" : "init"} , 1);
+	showClass({"init" : 0, "create-game" : 1, "join-game" : 1});
 
 	//listner for create game and join-game button
 	getId("create-game", 1).addEventListener('click', createGame, false);
@@ -220,22 +235,54 @@ function loadPreloader() {
 
 
 	//hide the rest of items below it
-	getId("create-game", 1).style.display = "inline-block";
-	getId("join-game", 1).style.display = "inline-block";
-
-	getId("game-id-box", 1).style.display = "none";
 	getId("game-id-box", 1).value = "";
-	getId("game-id-box", 1).removeAttribute("disabled");
-	getId("game-id-box", 1).style.width = "auto";
-
-	getId("loader", 1).style.display = "none";	
-	getId("loader-text", 1).style.marginTop = "50px";
+	applyStyle(5, "game-id-box", "disabled");
+	applyStyle(2, "game-id-box", "auto");
+	
+	applyStyle(4, "loader-text", "50px");
 	displayMsg( {"loader-text" : "The other player left the game."});
 
 
 	console.log("Final : The pre loader function complete.");
 }
 
+
+function applyStyle( whichStyle, id, value) {
+
+	switch(whichStyle) {
+		case 1 : getId(id, 1).style.display = value;
+				 break;
+		case 2 : getId(id, 1).style.width = value;
+				 break;	
+		case 3 : getId(id, 1).style.marginLeft = value;
+				 break;	
+		case 4 : getId(id, 1).style.marginTop = value;
+				 break;
+		case 5 : getId(id, 1).removeAttribute(value);
+				 break;
+		case 6 : getId(id, 1).setAttribute(value[0], value[1]);
+				 break;		 
+	}	
+}
+
+function hideClass( list) {
+	var obj = {};
+	list.forEach( function(item) {
+		obj[item] = "hide";
+		applyStyle(5, item, "class");
+	});
+	editClass(obj, 1);
+}
+
+function showClass( obj) {
+	var remClass = {};
+	for( var item in obj){
+		obj[item] =  obj[item] ? "showIB" : "showB" ;
+		remClass[item] = "hide";
+	}
+	editClass(obj, 1);
+	editClass(remClass, 0);
+}
 
 /*-------------------------------------------------------------------------------------------------------
 All functions related to game and game play
@@ -258,6 +305,9 @@ function gameinit() {
 	Game.CurrentPlayer = 1 ;
 	Game.Chances = 0;
 
+	playerDisable = createGameFlag ? false : true;
+	otherPlayersMove = createGameFlag ? false : true;
+
 	//display players names and welcome message in the stats area
 	displayMsg ( { "user_1" : Game.PlayerOne, 
 				   "user_2" : Game.PlayerTwo,
@@ -268,6 +318,10 @@ function gameinit() {
 
 	//clear the arena
 	clearArena();
+
+	//activating and deactivating all cells
+	deactivateAllCells();
+	if(createGameFlag)		{  activateCells(); }
 }
 
 function addGameListeners() {
@@ -279,13 +333,6 @@ function addGameListeners() {
 		socket.emit("RestartGame", "Restart the game.");
 		console.log("Restart Command send.");
 	}, false);
-
-	//Listener for the board
-	var td = document.querySelectorAll("td");
-	for( var i = 0; i < td.length ; ++i ){
-		td[i]. addEventListener('click', play, false);
-	}
-
 }
 
 /*funtion to select an element by id or name 
@@ -345,9 +392,9 @@ function clearArena() {
 
 	//clear all the cells 
 	for (var i = 1; i < 10; i++) {
-		var cellId = "c"+i; 
-		getId(cellId, 1).removeAttribute('class');
-		getId(cellId, 1).innerHTML = "&nbsp;&nbsp;&nbsp;";
+		var cellId = "c"+i;
+		applyStyle(5, cellId, "class"); 
+		getId(cellId, 1).innerHTML = "&nbsp;&nbsp;&nbsp;" ;
 		var cell = {};
 		cell[ "c" +i] = 'active';
 		editClass( cell, 1);
@@ -409,6 +456,8 @@ function play(evt) {
 	Game.CurrentPlayer = Game.CurrentPlayer == 1 ? 2 : 1 ;
 	playerDisable = !playerDisable;
 
+	if(playerDisable) { deactivateAllCells(); }
+
 	//change the focus in username highlighting
 	playerFocus(Game.CurrentPlayer);
 
@@ -423,6 +472,8 @@ function play(evt) {
 		console.log('Sending click to other player : ' + num);
 	}
 	
+	//if the implemented move was played by other player then actiavte the cells for the current user
+	if(otherPlayersMove) { activateCells() ; }
 	otherPlayersMove = false;
 
 	//checking whether the game is over
@@ -502,16 +553,29 @@ function gameOverEvents() {
 	changeBgWonCell();
 
 	//deactivate all remaining cells
-	var td = document.querySelectorAll("td");
-	for( var i = 0; i < td.length ; ++i ){
-		td[i]. removeEventListener('click', play, false);
-		td[i].classList.remove('active');
-	}
+	deactivateAllCells();
 
 	//alert( (Game.Winner == 1 ? Game.PlayerOne : Game.PlayerTwo ) +' Won the Game. Congragulations..!!');
 }
 
+function deactivateAllCells() {
+	//deactivate all remaining cells
+	var td = document.querySelectorAll("td");
+	for( var i = 0; i < td.length ; ++i ){
+		td[i].removeEventListener('click', play, false);
+		td[i].classList.remove('active');
+	}
+}
 
+function activateCells() {
+	var td = document.querySelectorAll("td");
+	for( var i = 0; i < 9 ; ++i) {
+		if( !Game.Board[i]) {
+			td[i].addEventListener('click', play, false);
+			td[i].classList.add('active');
+		}
+	}
+}
 
 function winCaseToCellMapping() {
 
@@ -534,13 +598,11 @@ function changeBgWonCell() {
 
 	var cells = winCaseToCellMapping();
 	//change backround of the winning players line of cells
-	document.getElementById("c"+ ++cells[0]).classList.add('won-cell');
-	document.getElementById("c"+ cells[0]).classList.remove('user-' + Game.Winner + '-cell');
 
-	document.getElementById("c"+ ++cells[1]).classList.add('won-cell');
-	document.getElementById("c"+ cells[1]).classList.remove('user-' + Game.Winner + '-cell');
+	cells.forEach( function(item) {
+		getId("c"+ cells[0]).classList.remove('user-' + Game.Winner + '-cell');
+		getId("c"+ ++cells[0]).classList.add('won-cell');
+	});
 
-	document.getElementById("c"+ ++cells[2]).classList.add('won-cell');
-	document.getElementById("c"+ cells[2]).classList.remove('user-' + Game.Winner + '-cell');
 }
 

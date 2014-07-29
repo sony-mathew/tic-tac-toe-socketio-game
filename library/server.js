@@ -2,11 +2,13 @@
 //external required modules
 var http = require("http");
 var url = require("url");
-var fs = require('fs');
 
 //server config
-var port = 8000;
-var serverUrl = "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8000;
+var serverUrl = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+
+console.log(" serverUrl : " + serverUrl + " Port : " + port);
+
 
 //socket io required variables
 var io = '';
