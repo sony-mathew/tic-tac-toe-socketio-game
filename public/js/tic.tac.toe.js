@@ -71,7 +71,7 @@ socket.on('playGame', function(data) {
 				console.log('Other players move recieved.');
 				otherPlayersMove = true;
 				play(data);
-				console.log("other players move implemented.");
+				console.log("Other players move implemented.");
 				//implementOtherPlayersMove(data);
 			});
 
@@ -87,6 +87,76 @@ socket.on('RestartGame', function(data) {
 				console.log(data+ " ::: The other guy restarted.");
 				gameinit();
 			});
+
+
+/*-------------------------------------------------------------------------------------------------------
+Genaral functions
+--------------------------------------------------------------------------------------------------------*/
+
+/*funtion to select an element by id or name 
+if flag = 0 , select id, or select by name */
+function getId( name , flag ) {
+
+		return (flag ? document.getElementById(name) : document.getElementsByName(name)[0].value );
+	}
+
+
+function editClass(object, flag) {
+
+	for (var id in object) {
+		if( flag ) {
+			document.getElementById(id).classList.add(object[id]);
+		} else {
+			document.getElementById(id).classList.remove(object[id]);
+		}	
+	}
+}
+
+function displayMsg(msg) {
+
+	for (var id in msg) {
+		document.getElementById(id).innerHTML = msg[id]; 	
+	}	
+}
+
+
+function applyStyle( whichStyle, id, value) {
+
+	switch(whichStyle) {
+		case 1 : getId(id, 1).style.display = value;
+				 break;
+		case 2 : getId(id, 1).style.width = value;
+				 break;	
+		case 3 : getId(id, 1).style.marginLeft = value;
+				 break;	
+		case 4 : getId(id, 1).style.marginTop = value;
+				 break;
+		case 5 : getId(id, 1).removeAttribute(value);
+				 break;
+		case 6 : getId(id, 1).setAttribute(value[0], value[1]);
+				 break;		 
+	}	
+}
+
+function hideClass( list) {
+	var obj = {};
+	list.forEach( function(item) {
+		obj[item] = "hide";
+		applyStyle(5, item, "class");
+	});
+	editClass(obj, 1);
+}
+
+function showClass( obj) {
+	var remClass = {};
+	for( var item in obj){
+		obj[item] =  obj[item] ? "showIB" : "showB" ;
+		remClass[item] = "hide";
+	}
+	editClass(obj, 1);
+	editClass(remClass, 0);
+}
+
 
 /*-------------------------------------------------------------------------------------------------------
 Preloader form events and functions
@@ -247,43 +317,6 @@ function loadPreloader() {
 }
 
 
-function applyStyle( whichStyle, id, value) {
-
-	switch(whichStyle) {
-		case 1 : getId(id, 1).style.display = value;
-				 break;
-		case 2 : getId(id, 1).style.width = value;
-				 break;	
-		case 3 : getId(id, 1).style.marginLeft = value;
-				 break;	
-		case 4 : getId(id, 1).style.marginTop = value;
-				 break;
-		case 5 : getId(id, 1).removeAttribute(value);
-				 break;
-		case 6 : getId(id, 1).setAttribute(value[0], value[1]);
-				 break;		 
-	}	
-}
-
-function hideClass( list) {
-	var obj = {};
-	list.forEach( function(item) {
-		obj[item] = "hide";
-		applyStyle(5, item, "class");
-	});
-	editClass(obj, 1);
-}
-
-function showClass( obj) {
-	var remClass = {};
-	for( var item in obj){
-		obj[item] =  obj[item] ? "showIB" : "showB" ;
-		remClass[item] = "hide";
-	}
-	editClass(obj, 1);
-	editClass(remClass, 0);
-}
-
 /*-------------------------------------------------------------------------------------------------------
 All functions related to game and game play
 --------------------------------------------------------------------------------------------------------*/
@@ -333,32 +366,6 @@ function addGameListeners() {
 		socket.emit("RestartGame", "Restart the game.");
 		console.log("Restart Command send.");
 	}, false);
-}
-
-/*funtion to select an element by id or name 
-if flag = 0 , select id, or select by name */
-function getId( name , flag ) {
-
-		return (flag ? document.getElementById(name) : document.getElementsByName(name)[0].value );
-	}
-
-
-function editClass(object, flag) {
-
-	for (var id in object) {
-		if( flag ) {
-			document.getElementById(id).classList.add(object[id]);
-		} else {
-			document.getElementById(id).classList.remove(object[id]);
-		}	
-	}
-}
-
-function displayMsg(msg) {
-
-	for (var id in msg) {
-		document.getElementById(id).innerHTML = msg[id]; 	
-	}	
 }
 
 function playerFocus( user )  {
@@ -600,8 +607,8 @@ function changeBgWonCell() {
 	//change backround of the winning players line of cells
 
 	cells.forEach( function(item) {
-		getId("c"+ cells[0]).classList.remove('user-' + Game.Winner + '-cell');
-		getId("c"+ ++cells[0]).classList.add('won-cell');
+		getId("c"+ ++item, 1).classList.remove('user-' + Game.Winner + '-cell');
+		getId("c"+ item, 1).classList.add('won-cell');
 	});
 
 }
