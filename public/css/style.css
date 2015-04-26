@@ -1,5 +1,10 @@
 html {
 	background-image: url('../images/2.jpg');
+	background: url('../images/2.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 body {
@@ -29,7 +34,7 @@ a:hover {
 
 .header, .arena {
 	width: 100%;
-	border: 1px solid grey;
+	border-bottom: 1px solid rgb(53, 105, 124);;
 	border-radius: 4px;
 } 
 
@@ -40,20 +45,18 @@ a:hover {
 	position: fixed;
 	top:0px;
 	left: 0px;
-	/*padding-left: 30px;*/
-	height: 65px;
+	min-height: 65px;
 	padding: 20px 20px 8px 40px;
-	font-size: 22px;
+	font-size: 25px;
 	border-radius: 0px;
 	box-sizing : border-box;
-	font-family: "ITC Eras Light", Helvetica;
 	font-weight: lighter;
 }
 
 
 .header .header-right{
 	float: right;
-	font-size: 13px;
+	font-size: 15px;
 	color:deepskyblue;
 	padding-right: 30px;
 	padding-top: 5px;
@@ -64,13 +67,15 @@ a:hover {
 }
 
 .left, .right {
-	width: 45%;
+	width: 40%;
+	min-width: 200px;
+  margin-top: 30px;
+  float: left;
 	/*display: inline-block;*/
-	float: left;
 }
 
 .left {
-	margin-right: 5%;
+	margin-right: 20px;
 }
 .stats .user {
 	width: 100%;
@@ -79,7 +84,7 @@ a:hover {
 	padding: 10px;
 	/*border: 1px solid yellow;*/
 	color: #00b7ea;
-	box-sizing : border-box;
+	/*box-sizing : border-box;*/
 }
 
 .stats .msg {
@@ -104,7 +109,7 @@ a:hover {
 .stats .restart button {
 	width: 95%;
 	padding: 10px;
-	border-radius: 5px;
+	border-radius: 3px;
 	background: #d04f3a;
 	color: white;
 	font-size: 16px;
@@ -122,7 +127,7 @@ a:hover {
 	text-align: center;
 	display: inline-block;
 	padding: 8px;
-	border-radius: 5px;
+	border-radius: 3px;
 	font-size: 20px;
 	box-shadow: 5px 5px 5px #888888;
 }
@@ -143,11 +148,11 @@ a:hover {
 }
 
 .stats .user .symbol {
-	border-radius: 5px;
-	width : 17%;
+	border-radius: 3px;
+	width : 15px;
 	float: right;
 	text-align: center;
-	padding: 8px;
+	padding: 8px 9px;
 	display: inline-block;
 	color: white;
 	font-size: 20px;
@@ -163,6 +168,7 @@ a:hover {
 	border: 1px solid lightgrey;
 	border-radius: 10px;
 	background-color: white;
+	min-width: 380px;
 }
 
 .arena table{
@@ -215,13 +221,13 @@ a:hover {
 
 .init {
 	padding: 30px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -250px;
-    text-align: center;
-    border-radius: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -250px;
+  text-align: center;
+  border-radius: 8px;
 	background-color: white;
 }
 
@@ -244,7 +250,7 @@ a:hover {
 	font-size: 20px;
 	color: white;
 	background-color: #00b7ea;
-	border-radius: 10px;
+	border-radius: 5px;
 	border: none;
 	cursor: pointer;
 	font-weight: lighter;
@@ -256,6 +262,7 @@ a:hover {
 
 .init #name-submit{
 	font-size: 28px;
+	 margin-top: 20px;
 }
 
 .init #join-random-game {
@@ -284,6 +291,7 @@ a:hover {
 
 .showIB {
 	display: inline-block;
+	margin-top: 20px;
 }
 
 .showB {
@@ -294,3 +302,4 @@ a:hover {
 	width: 100%;
 	height: 2px;
 }
+
