@@ -1,4 +1,4 @@
-Tic Tac Toe Online Game
+# Tic Tac Toe Online Game
 
 This is simple tic tac toe game developed using Nodejs as the server with socketIO included. In the client side, no external libraries except socketIO is used. The entire game has been developed using pure javascript, HTML and CSS.
 
